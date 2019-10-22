@@ -1,0 +1,650 @@
+\PassOptionsToPackage{warn}{textcomp}
+\documentclass[conference, a4paper]{IEEEtran}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[table,x11names,dvipsnames,table]{xcolor}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage[utf8]{inputenc}
+%\usepackage{algorithmic}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage[noadjust]{cite}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{textcomp}
+\usepackage{todonotes}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{footnote}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\DeclareMathOperator{\tfidf}{tf-idf}
+\DeclareMathOperator{\tf}{tf}
+\DeclareMathOperator{\df}{df}
+
+\renewcommand*{\sectionautorefname}{Section}
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+\usepackage{datetime} % dates on footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhf{}
+\fancyfoot[LE,RO]{\today\ \currenttime}
+\begin{document}
+
+\title{Usage Metrics for Research Data:\\Shortcomings, Mitigiations and Research Questions}
+
+\author{
+	\IEEEauthorblockN{
+        Data Usage Metrics Working Group
+    }
+	\IEEEauthorblockA{
+		\textit{Research Data Alliance}
+    }
+}
+
+\maketitle
+
+\begin{abstract}
+The fair assessment of research data is a hard task,
+both for technical and social reasons.
+Usage metrics are a central pillar in solving these problems.
+However, usage statistics are not without shortcomings,
+which are presented and classified in this paper;
+technical and organizational mitigations exist or are in development,
+but there are still issues demanding further research.
+A list of such open challenges is another contribution of this paper.
+Facing these challenges will contribute to open and transparent scientometric research
+and fair assessment of digital scholarly output.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Research data, scientometrics, bibliometrics, usage metrics
+\end{IEEEkeywords}
+
+\section{Introduction}\label{sec:introduction}
+
+Research data is understood as all digital content which is used
+to produce or verify knowledge in the context of the sciences and humanities \cite{8588646}.
+Research data are a key ingredient in evidence-based methods of modern research.
+Their importance is growing, as is the amount of research data available for researchers.
+These developments come with social and technical challenges;
+one of these challenges concerns the assessment of research data:
+With both the number and the size of data growing exponentially,
+how can we assess the quality, impact, or relevance of research data?
+
+One approach to answer this questions is based on usage metrics.
+Usage metrics of research data are a special case of event-based metrics for research data,
+which are a metrics that depends on summing up interactions over (possibly distributed) sources,
+such as publications, logs of providers of research data services, or social media platforms.
+Other examples for event-based metrics are citations or likes on social media platforms.
+While these two latter examples are based on "public" interactions,
+usage statistics are "private" in the sense that the interaction with the dataset
+is not on public record.
+Examples are views and downloads of research data.
+
+All event-based metrics can be taken as indicators for
+quality, impact, or relevance of a dataset.
+In this case several shortcomings of these metrics need to be taken into account,
+of which some are common to impact or popularity metrics in general,
+but some are also specific to the context (research).
+
+During the lifespan of the "Data Usage Metric" working group of the Research Data Alliance (RDA)\footnote{\url{https://rd-alliance.org/groups/data-usage-metrics-wg}},
+these shortcomings of usage statistics have been collected and discussed,
+most prominently during the 13th RDA plenary in Philadelphia (April 2019),
+the 17th ISSI conference in Rome (September 2019),
+and the 14th RDA plenary in Helsinki (October 2019).
+Main source for the discussion was the
+Code Of Practice for research data usage metrics" (COP, \cite{cop}),
+which has been adopted by a number of large research data repositories and data aggregators,
+such as DataOne \cite{dataone},
+Dryad \cite{dryad},
+and Zenodo \cite{zenodo}.
+This paper summarizes the results of these discussions,
+categorizes and characterizes mitigation strategies for the discussed shortcomings
+and outlines topics for further research.
+
+The paper is structured as follows:
+\autoref{sec:definitions} introduces the definition of basic concepts.
+In \autoref{sec:shortcomings} the shortcomings will be listed, categorized and characterized.
+The following \autoref{sec:mitigation} summarizes technical and social mitigation strategies,
+respectively.
+\autoref{sec:questions} presents open research questions.
+The paper is concluded by \autoref{sec:conclusion} which gives an outlook
+over the next planned activities.
+
+\section{Definitions}\label{sec:definitions}
+\begin{itemize}
+    \item A \emph{metric} is a mapping of a dataset to the real numbers.
+    \item The value the metric maps the dataset onto is called the \emph{score} of the dataset.
+    \item A \emph{transaction} denotes the event during which an interaction with the dataset
+        took place (download, view, citation, etc.).
+\end{itemize}
+
+\section{Shortcomings}\label{sec:shortcomings}
+
+The presented shortcomings were collected during
+the lifespan of the "Usage Data Metrics" working group of the Research Data Alliance.
+During the meetings (RDA plenaries, video conferences) and in outreach activities
+(participation at the ISSI in Rome),
+they were discussed and refined.
+The section starts with a characertization of the shortcomings,
+continues with a categorization proposal
+and concludes with a tabular mapping of the shortcomings to the categories.
+
+\subsection{List of Shortcomings}
+
+The following distinct shortcomings were brought up in this or a similar form:
+
+\begin{enumerate}
+\item \textbf{Interaction Counting}: The score of a dataset is too high,
+because it counts several interactions by one user (like double-clicks or sessions)
+as single transactions, instead of one.
+\item \textbf{Same Name Duplication}: The score of a dataset is too low,
+because it does not include all transactions since it is (identically) published on several repositories.
+\item \textbf{Different Name Duplication}: The score of a dataset is too low,
+because it was (re-)published under a different identifier with the same content,
+and these scores have not been merged.
+\item \textbf{Good bot}: The score of a dataset is too high,
+because requests from bots (crawlers, spiders, etc.) are counted equally to "human"
+or "normal" requests.
+This shortcoming only includes behaviour that ist unintentionally harmful.
+\item \textbf{Forgery (Bad bot)}: The score of a dataset is too high,
+because the number of investigations and requests is artificially increased,
+probably with the help of machines and circumventing the technical countermeasures in place.
+This shortcoming only includes intentionally malevolent behaviour.
+\item \textbf{Versioning}: The score of a dataset is too low,
+because its predecessors or successors are not accounted for.
+The paradigmatic case for this shortcoming is the existence of preprints and postprints for a publication.
+\item \textbf{Granularity}: The score of a dataset is too high/low,
+depending on the granularity in which it is made accessible.
+If the dataset is published as one item, there is also only one transaction;
+if it is split up into components, there are several transactions.
+Heterogeneous datasets pose special granularity problems,
+e.g.\ when code and data are published in one package,
+it is unclear whether both or only one is used (and in this case: which one).
+\item \textbf{Aggregation}: The score of a dataset is too high,
+since it is published both as a composite and component-wise,
+and the transactions are aggregated and counted both on the level of the components
+\emph{and} on the level of the dataset.
+In contrast to the granularity shortcoming, the problem is not the resolution
+in which the data are published, but that \emph{one} transaction is counted \emph{twice}.
+\item \textbf{Fancy usage}: The score of a dataset is too low,
+since a usage context that differs from the canonical usage context
+is not counted/reported or countable/reportable.
+Canonical usages include views (investigations in the COP) and
+downloads (requests in the COP).
+An example are streamed data: these are used differently than static data,
+their access pattern typically does not allow
+for easy discretizations comparable to static data publications.
+
+\item \textbf{Timliness}: The scores for datasets x and y are not comparable,
+because they were released at two distant points in time.
+\item \textbf{Normalization}: The scores for datasets x and y are not comparable,
+because the number of people typically interested in datasets like x is bigger/smaller than the according number for y.
+
+\item \textbf{Bandwagon Effect}: You cannot use usage metrics to definitely determine impact/quality/relevance of the scored dataset,
+because already popular datasets are more likely to get increased usage scores.
+Comparisons between datasets are more likely to be skewed, the bigger the distance between the scores is.
+\item \textbf{Trust}: You cannot use usage metrics when arbitrary repositories report their scores,
+because there is no reason to trust the reporting repository with regard to
+the numbers reported and with regard to the correct implementation of the standard.
+\item \textbf{Correlation}: You cannot use usage metrics to determine impact/quality/relevance of the dataset,
+because usage metrics do not necessarily correlate with impact/quality/relevance:
+A "bad example" could easily get high access numbers.
+Zero or very low access numbers do not indicate low quality (a "good" dataset could have not been promoted).
+\end{enumerate}
+
+
+\subsection{Classes of Shortcomings}
+
+As can be seen from the previous subsection,
+critque of usage metrics commonly follows one of the following patterns:
+\begin{itemize}
+    \item The score of a dataset is too low/high, $\dots$
+    \item The score of datasets x and y are not comparable, $\dots$
+    \item You cannot use usage metrics in context z, $\dots$
+\end{itemize}
+This suggests to categorize the shortcoming of usage metrics by the \textbf{direction of the critique}:
+\begin{itemize}
+    \item \emph{validity}: the score of a dataset is invalid
+    \item \emph{comparability}: scores of datasets are not comparable
+    \item \emph{contextuality}: the scores cannot be used in a certain context
+\end{itemize}
+
+
+Another category captures the \textbf{role(s) most suited to design mitigation strategies}
+for a shortcoming.
+The following generic roles have a specific perspective
+on the creation, aggregation and usage of usage metrics:
+\begin{itemize}
+    \item \emph{Repository Providers}:
+        The role responsible for hosting the platform on which the transactions
+        occur.\footnote{\cite{cop} lists repository and data repository as possible values.}
+        Examples are Zenodo and Dryad.
+        In \autoref{tab:shortcomings} we did not count
+        adhering to the standard as a mitigation strategy.
+    \item  \emph{Standard Issuers}:
+        The role responsible to define standards as \cite{cop}.
+    \item  \emph{Metric Aggregators}:
+        The role responsible to collect the data from the RPs;
+        examples are DataCite and DataOne
+    \item  \emph{Metric Users}:
+        The role that uses the (aggregated) metric for a certain purpose;
+        an example are decision makers, who are assigning resources based on metrics.
+\end{itemize}
+
+As a last category, \textbf{code of practice}, we classify the shortcomings whether they are handled by the COP \cite{cop}.
+Since this is a matter of degree the possible values are \emph{entirely},
+if the COP handles the shortcoming exhaustive,
+\emph{partially} if it handles some of the aspects of the shortcomings, and \emph{no},
+if the COP does not provide mitigations/countermeasures.
+
+The mapping of classes to the shortcomings listed in the previous subsection can be seen in \autoref{tab:shortcomings}.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{table*}[!h]
+
+\caption{\label{tab:shortcomings}Classified Shortcomings}
+\centering
+
+\begin{tabular}{>{\raggedright\arraybackslash}llllllll}
+\toprule
+    \# &
+    Shortcoming &
+    Direction &
+    Repository Provider &
+    Standard Issuer &
+    Metrics Aggregator &
+    Metrics User &
+    Code\\
+\midrule
+    \rowcolor{gray!6}
+    1 &
+    Interaction Counting &
+    validity &
+    $\times$ &
+    $\checkmark$ &
+    $\times$ &
+    $\times$ &
+    entirely\\
+
+    2 &
+    Same Name Duplication &
+    validity &
+    $\times$ &
+    $\checkmark$ &
+    $\checkmark$ &
+    $\times$ &
+    entirely\\
+
+    \rowcolor{gray!6}
+    3 &
+    Different Name Duplication &
+    validity &
+    $\checkmark$ &
+    $\times$ &
+    $\times$ &
+    $\times$ &
+    no\\
+
+    4 &
+    Good bot &
+    validity &
+    $\times$ &
+    $\checkmark$ &
+    $\times$ &
+    $\checkmark$ &
+    entirely\\
+
+    \rowcolor{gray!6}
+    5 &
+    Forgery (bad bot) &
+    validity &
+    $\checkmark$ &
+    $\times$ &
+    $\times$ &
+    $\times$ &
+    no\\
+
+    6 &
+    Versioning &
+    validity &
+    $\times$ &
+    $\checkmark$ &
+    $\times$ &
+    $\times$ &
+    entirely\\
+
+    \rowcolor{gray!6}
+    7 &
+    Granularity &
+    validity &
+    $\checkmark$ &
+    $\times$ &
+    $\times$ &
+    $\times$ &
+    no\\
+
+    8 &
+    Aggregation &
+    validity &
+    $\checkmark$ &
+    $\checkmark$ &
+    $\times$ &
+    $\checkmark$ &
+    entirely\\
+
+    \rowcolor{gray!6}
+    9 &
+    Fancy usage &
+    validity &
+    $\times$ &
+    $\checkmark$ &
+    $\times$ &
+    $\checkmark$ &
+    no\\
+
+    10 &
+    Timliness &
+    comparability &
+    $\times$ &
+    $\checkmark$ &
+    $\times$ &
+    $\checkmark$ &
+    partially\\
+
+    \rowcolor{gray!6}
+    11 &
+    Normalization &
+    comparability &
+    $\times$ &
+    $\times$ &
+    $\checkmark$ &
+    $\checkmark$ &
+    no\\
+
+    12 &
+    Bandwagon &
+    contextuality &
+    $\times$ &
+    $\times$ &
+    $\checkmark$ &
+    $\checkmark$ &
+    no\\
+
+    \rowcolor{gray!6}
+    13 &
+    Trust &
+    contextuality &
+    $\checkmark$ &
+    $\times$ &
+    $\checkmark$ &
+    $\times$ &
+    no\\
+
+    14 &
+    Correlation &
+    contextuality &
+    $\times$ &
+    $\times$ &
+    $\times$ &
+    $\checkmark$ &
+    no
+\end{tabular}
+\end{table*}
+\end{knitrout}
+
+
+
+
+\section{Risk Assessment and Mitigation Strategies}\label{sec:mitigation}
+This section assesses the risk of each shortcoming and presents the state of the art
+of possible mitigation strategies.
+Risk is understood as a combination of the probability of occurence and
+the impact of the potential damage.
+While the available data are too sparse for an estimation of probabilities of occurrence,
+the expected impact can be thouroughly discussed in this paper:
+\begin{itemize}
+    \item \emph{Minimal damage} means that the shortcoming has a negligible effect
+        on assessements.
+    \item \emph{Medium damage} means that the shortcoming introduces a detectable
+        bias, when the metrics are used for assessment, which could be corrected programmatically.
+    \item{Large damage} means that the shortcoming has the potential to make a
+        fair assessment impossible.
+\end{itemize}
+Mitigations are discussed in the context of the roles responsible to implement them.
+
+TODO: Does the standard allow revocation of already reported metrics?
+
+\subsection{Interaction Counting}
+Variing interaction counting is of large impact.
+The COP standardizes the counting procedure with regard to double-clicks
+and sessions (7.2/7.3).
+
+\subsection{Same Name Duplication}
+
+Missing metrics due to this type of duplication is of medium impact,
+since the merging of two datasets with the same identifier is a programmatic countermeasure.
+The COP demands persistent and globally unique
+identifiers for datasets, which makes this shortcoming efficiently mitigateable
+by metrics aggregators.
+It would be beneficial to make statistics about the merging process publicly available,
+e.g.\ which sources reported which amount of transactions.
+
+\subsection{Different Name Duplication}
+Different name ducplication is of large impact.
+The main difference between this shortcoming and same name duplication is
+the absence of an easy way to determine whether two datasets are equal.
+In a future in which more platforms take advantage of liberal licensing of
+some datasets this might become a bigger issue than it seems to be today.
+Even more so, if different repositories offer services of variing quality:
+repository A might curate a dataset x (which has several versions over time
+of both data and metadata),
+while repository B only publishes content once and never applies any curational
+tasks on it.
+The COP prescribes unique reporting of datasets published in more than one repository (7.4),
+but this is ineffective in cases, in which the repositories are not provided under the
+same instituational roof.
+
+The only role who can effectively mitigate this shortcoming is the repository provider
+on the one hand repository providers could allow submitters to specify already
+existing identifiers (Zenodo allows that);
+on the other hand repository providers should update the usage agreements to
+ban re-publishing of already published content with a differing
+identifier than the original one.
+
+\subsection{Good Bots}
+
+This shortcoming is of medium impact.
+The COP offers the possibility to differentiate between regular usage
+and usage by a machine based on the user agent field of the http request.
+It is furthermore differentiated between crawlers and bots from search engines,
+and scripted and automated access. Only the latter should be counted.
+The maintenance of a blacklist of user-agents to be dropped by the counters
+of the repository providers is maintained by the issuers of the standard.
+
+\subsection{Forgery (Bad Bots)}
+
+This shortcoming is of large impact.
+Automated attacks are known to be distributed and of variance in the http requests sent,
+which makes their detection and therefore countermeasures difficult.
+Possible countermeasures on the side of repository providers include partial reporting
+(if the malicious accesses can be narrowed down to a specific window of time),
+anomaly detection (a dataset getting anormal attention).
+A standardized way to revoce already reported metrics
+would also be an effective countermeasure to decrease
+the motivation of the attackers.
+
+\subsection{Versioning}
+This shortcoming is of medium impact.
+The COP makes the reporting of a version specifier mandatory, if applicable.
+Transcation are furthermore reported for each version
+and as a cumulative total across versions.
+
+\subsection{Granularity}
+This shortcoming is of large impact.
+Since there is an incentive to publish research data in the highest resolution of granularity,
+it is possible that publishing strategies of repository providers converges
+to such a practice.
+The COP allows the reporting of the download volume, which introduces a reciprocal incentive,
+but this is not without its own problems, e.g.\ a bias for large datasets..
+There is in general no mitigation available for this shortcoming.
+
+\subsection{Aggregation}
+This shortcoming is of medium impact.
+It is mitigated by the COP: If a user requests a component of a dataset
+it is only counted as aone unique request.
+If the composite and its components is published as single entities,
+their counts must be idenpendent with regard to the COP.
+
+\subsection{Fancy Usage}
+This shortcoming is of medium impact.
+The COP states that it does not specify how usage metrics for "dynamically changing datasets"
+should be reported.
+Whether or not data streams (like video streams, audio strema, sensory data)
+fall under this category is not explicitely stated in the COP.
+Steps necessary to include fancy usage include the definition of appropriate transaction types,
+such as (partial) consumption of video or audio  streams or recording of sensory streams.
+Unless such a conceptual framework is available,
+metrics users should refrain from comparisons of metrics for such "dynamic" content
+with the scores reported COP-compliant.
+
+\subsection{Timliness}
+This shortcoming is of large impact.
+The COP circumvents this problem by
+making the reporting of the publication year mandatory.
+This allows to normalize the number of transaction with regard to the age of the dataset.
+The problem persists, if a yearly resolution is insufficent for
+a temporal contextualisation of the scores.
+If instead of the year, the date of the publication would be made mandatory,
+a finer resolution would be possible.
+Unless a finer resolution is available,
+metrics users should make comparisons with care, if the datasets compared are both
+relatively young
+(although they have been published in the same year, they could be almost one year apart).
+
+\subsection{Normalization}
+This shortcoming is of large impact.
+It is necessary to retrieve organizational and technical background when comparing scores
+of two data sets.
+This is the responsibility of metrics users.
+Possible contexts to normalize against include but are not limited to:
+\begin{itemize}
+        \item discipline of research
+        \item formats and encodings
+        \item size
+\end{itemize}
+
+\subsection{Bandwagon Effect}
+This shortcoming is of large impact.
+For normalization procedures and analyses based on non-robust statistics
+(such as the arithmetic mean) outliers have the potential to bias the resulting values.
+Metrics users should discuss the effect of this shortcoming in their decisions or
+conclusions.
+The threat to overstress outliers can be mitigated by contextualizing scores
+with data benchmarks.
+
+\subsection{Trust}
+This shortcoming is of minimal impact.
+The COP states the possibility of auditions without specifying what institution would be
+responsible for such an endeavor.
+Certified audits are a good countermeasure, if they are honored by metrics aggregator,
+which means that the possibility exist to select only those scores which were aggregated
+over repository providers which were audited.
+Metrics aggregators could themselves be audited.
+
+\subsection{Correlation}
+This shortcoming is of large impact.
+As with bandwagon effects the only available countermeasure is to contextualize the scores
+with other event-based metrics (citations, altmetrics) or data benchmarks.
+Metrics users should consider a discussion of the context in order to mitigate this shortcoming.
+
+\section{Open Research Questions}\label{sec:questions}
+
+There exist some Analyses of the data catalogue of differen research data service providers:
+\begin{itemize}
+        \item Rodrigez
+        \item Peters
+\end{itemize}
+
+\begin{itemize}
+        \item Indicators for shortcomings: How can we measure these?
+        \item Related to previous questio: Success criteria for mitigations
+        \item Usefulness as impact/quality/relevance indicator?
+        \item Relation to other metrics (altmetric, citations, data benchmarks):
+            Better, worse, complimentary?
+\end{itemize}
+Indicators do they occurr? If so clustered in some disciplines?
+\section{Conclusion \& Outlook}\label{sec:conclusion}
+\begin{itemize}
+        \item RDA activities
+        \item Make data count project
+\end{itemize}
+
+
+\section*{Acknowledgements}
+Remember to thank:
+\begin{itemize}
+    \item 1
+    \item 2
+\end{itemize}
+
+\bibliographystyle{IEEEtran}
+\bibliography{paper}
+
+\end{document}
