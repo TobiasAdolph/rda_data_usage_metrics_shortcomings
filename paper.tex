@@ -117,9 +117,6 @@ Research data, scientometrics, bibliometrics, usage metrics
 \end{IEEEkeywords}
 
 \section{Introduction}\label{sec:introduction}
-
-Research data is understood as all digital content which is used
-to produce or verify knowledge in the context of the sciences and humanities \cite{8588646}.
 Research data are a key ingredient in evidence-based methods of modern research.
 Their importance is growing, as is the amount of research data available for researchers.
 These developments come with social and technical challenges;
@@ -129,7 +126,7 @@ how can we assess the quality, impact, or relevance of research data?
 
 One approach to answer this questions is based on usage metrics.
 Usage metrics of research data are a special case of event-based metrics for research data,
-which are a metrics that depends on summing up interactions over (possibly distributed) sources,
+which are metrics summing up interactions over (possibly distributed) sources,
 such as publications, logs of providers of research data services, or social media platforms.
 Other examples for event-based metrics are citations or likes on social media platforms.
 While these two latter examples are based on "public" interactions,
@@ -141,7 +138,7 @@ All event-based metrics can be taken as indicators for
 quality, impact, or relevance of a dataset.
 In this case several shortcomings of these metrics need to be taken into account,
 of which some are common to impact or popularity metrics in general,
-but some are also specific to the context (research).
+but some are also specific to the context at hand, namely research.
 
 During the lifespan of the "Data Usage Metric" working group of the Research Data Alliance (RDA)\footnote{\url{https://rd-alliance.org/groups/data-usage-metrics-wg}},
 these shortcomings of usage statistics have been collected and discussed,
@@ -154,20 +151,28 @@ which has been adopted by a number of large research data repositories and data 
 such as DataOne \cite{dataone},
 Dryad \cite{dryad},
 and Zenodo \cite{zenodo}.
-This paper summarizes the results of these discussions,
-categorizes and characterizes mitigation strategies for the discussed shortcomings
-and outlines topics for further research.
+This paper summarizes the results of these discussions.
+The contributions are as follows:
+\begin{itemize}
+        \item A comprehensive list of shortcomings
+        \item A comceptual framework to classify the shortcomings
+        \item An evaluation of impact of each shortcoming as a first step towards risk assessement
+        \item A mapping of each shortcoming to the role(s) responsible to mitigate them.
+        \item A report on the technical status quo of the mitigations
+        \item A list of open research questions considering all of the aforementioned aspects
+\end{itemize}
 
-The paper is structured as follows:
-\autoref{sec:definitions} introduces the definition of basic concepts.
-In \autoref{sec:shortcomings} the shortcomings will be listed, categorized and characterized.
-The following \autoref{sec:mitigation} summarizes technical and social mitigation strategies,
-respectively.
+The remainder of paper is structured as follows:
+\autoref{sec:background} introduces the definition of basic concepts and
+presents a selection of related work.
+In \autoref{sec:shortcomings} the shortcomings will be listed and defined, and a scheme for classification is proposed.
+The following \autoref{sec:mitigation} presents a partial risk assessement and outlines mitigation strategies.
 \autoref{sec:questions} presents open research questions.
 The paper is concluded by \autoref{sec:conclusion} which gives an outlook
 over the next planned activities.
 
-\section{Definitions}\label{sec:definitions}
+\section{Background}\label{sec:background}
+\subsection{Definitions}
 \begin{itemize}
     \item A \emph{metric} is a mapping of a dataset to the real numbers.
     \item The value the metric maps the dataset onto is called the \emph{score} of the dataset.
@@ -175,8 +180,32 @@ over the next planned activities.
         took place (download, view, citation, etc.).
 \end{itemize}
 
-\section{Shortcomings}\label{sec:shortcomings}
+\subsection{Related work}
 
+\cite{sh059} discusses heterogeneity, data quality and dependencies as challenges for altmetrics.
+Many aspects discussed in our paper are also raised by the authors
+(e.g.\ correlation, versioning, timeliness, normalization, bandwaggon effect),
+she is considering the shortcomings from the scientometrician's perspective.
+
+\cite{sh029} is an opinion piece on shortcomings of metrics
+in the context of assessing the impact of research.
+It is not limited to a certain type of metric.
+Beside the general scepticism with regard to any quantitative approach to assess research
+the paper includes a detailed discussion of citation-based metrics
+(which can also be classified as event-based metrics.).
+
+\cite{sh044} shares a sceptical stance of (alt)metrics,
+but points out possible beneficial use cases
+(faster results compared to citations and measuring societal relevance).
+
+From~\cite{sh007}:
+``Since both citation-based metrics and altmetrics measure the ``attention''' that
+publications receive (number of citations, social media ``likes'', ``retweets'' etc.)
+as a proxy for the success of that publication,
+it is to be expected that they share many of the same strengths and weaknesses.
+
+\section{Shortcomings}\label{sec:shortcomings}
+-
 The presented shortcomings were collected during
 the lifespan of the "Usage Data Metrics" working group of the Research Data Alliance.
 During the meetings (RDA plenaries, video conferences) and in outreach activities
@@ -203,13 +232,18 @@ and these scores have not been merged.
 because requests from bots (crawlers, spiders, etc.) are counted equally to "human"
 or "normal" requests.
 This shortcoming only includes behaviour that ist unintentionally harmful.
+Evidence for these types of bots is discussed in \cite{sh042} with regard
+to preprints and tweets, which is a similar setup than usage metrics.
 \item \textbf{Forgery (Bad bot)}: The score of a dataset is too high,
 because the number of investigations and requests is artificially increased,
 probably with the help of machines and circumventing the technical countermeasures in place.
 This shortcoming only includes intentionally malevolent behaviour.
+As for the example of good bots, \cite{sh042} discusses evidence and recommendations
+for a similar setup.
 \item \textbf{Versioning}: The score of a dataset is too low,
 because its predecessors or successors are not accounted for.
-The paradigmatic case for this shortcoming is the existence of preprints and postprints for a publication.
+The paradigmatic case for this shortcoming is the existence of preprints and postprints for a publication
+(analogue problem with altmetrics: \cite{sh059})
 \item \textbf{Granularity}: The score of a dataset is too high/low,
 depending on the granularity in which it is made accessible.
 If the dataset is published as one item, there is also only one transaction;
@@ -230,26 +264,40 @@ Canonical usages include views (investigations in the COP) and
 downloads (requests in the COP).
 An example are streamed data: these are used differently than static data,
 their access pattern typically does not allow
-for easy discretizations comparable to static data publications.
+for easy discretizations comparable to static data publications.\footnote{
+We found no methodological discussion of the different and often classified
+view counting mechanisms of big video platforms, such as youtube or vimeo}
 
 \item \textbf{Timliness}: The scores for datasets x and y are not comparable,
 because they were released at two distant points in time.
+Timeliness is especially a problem for usage statistics that are only recently collected,
+        (identical problem with altmetrics: \cite{sh046}, \cite{sh059})
 \item \textbf{Normalization}: The scores for datasets x and y are not comparable,
 because the number of people typically interested in datasets like x is bigger/smaller than the according number for y.
-
+The problem is discussed for publications in \cite{sh046}.
+Different altmetrics scores are compared across disciplines in \cite{sh007},
+but no proposals to normalize them for the sake of comparability are formulated.
 \item \textbf{Bandwagon Effect}: You cannot use usage metrics to definitely determine impact/quality/relevance of the scored dataset,
 because already popular datasets are more likely to get increased usage scores
-\cite{issi001}, \cite{issi003}.
+        \cite{sh055}, \cite{sh056} (also called "Matthew effect in \cite{sh059}, \cite{ebm007}).
 Comparisons between datasets are more likely to be skewed, the bigger the distance between the scores is.
 \item \textbf{Trust}: You cannot use usage metrics when arbitrary repositories report their scores,
 because there is no reason to trust the reporting repository with regard to
 the numbers reported and with regard to the correct implementation of the standard.
 \item \textbf{Correlation}: You cannot use usage metrics to determine impact/quality/relevance of the dataset,
 because usage metrics do not necessarily correlate with impact/quality/relevance:
-A "bad example" could easily get high access numbers.
+A "bad example" could easily get high access numbers (see \cite{sh060} for evidence),
+if creating sensations is incentivized the quality could suffer in the long run
+\cite{sh044}.
 Zero or very low access numbers do not indicate low quality (a "good" dataset could have not been promoted).
 \end{enumerate}
 
+To be discussed:
+\begin{itemize}
+\item \textbf{Coverage}: The score of a dataset is too low,
+    because the platforms providing it do not report usage statistcs.
+        Argument for it: \cite{sh059} \& \cite{sh031} (age, academic rank \& status, gender, discipline)discusses it for altmetrics.
+\end{itemize}
 
 \subsection{Classes of Shortcomings}
 
@@ -262,7 +310,7 @@ critque of usage metrics commonly follows one of the following patterns:
 \end{itemize}
 This suggests to categorize the shortcoming of usage metrics by the \textbf{direction of the critique}:
 \begin{itemize}
-    \item \emph{validity}: the score of a dataset is invalid
+    \item \emph{validity}: the score of a dataset is invalid (replace with uncertainty?)
     \item \emph{comparability}: scores of datasets are not comparable
     \item \emph{contextuality}: the scores cannot be used in a certain context
 \end{itemize}
@@ -450,8 +498,19 @@ The mapping of classes to the shortcomings listed in the previous subsection can
 \end{table*}
 \end{knitrout}
 
+\subsection{Advantages and Strengths}
+In comparison to other event-based metrics, usage metrics have also advantages:
+\begin{itemize}
+    \item The services are not provided by a quasi-monopolistic
+        (such as youtube for videos or twitter for micro blogs),
+        which allows to collaboratively define standards to ensure fairness and comparability.
+    \item Shared with "traditional" social metrics (altmetrics) is the capability to
+        capture interest much faster than more formal event-based metrics such as citations.
+\end{itemize}
 
-
+Other metrics which are not based on recorded events across "platforms" include data benchmarks.
+Data benchmarks are often very specific to a certain technology and expensive to implement,
+both shortcomings are not shared by event-based metrics (including usage metrics).
 
 \section{Risk Assessment and Mitigation Strategies}\label{sec:mitigation}
 This section assesses the risk of each shortcoming and presents the state of the art
@@ -468,6 +527,11 @@ the expected impact can be thouroughly discussed in this paper:
     \item{Large damage} means that the shortcoming has the potential to make a
         fair assessment impossible.
 \end{itemize}
+It is yet unknown, which role usage metrics will play in the assessement of the digital output
+of the sciences and humanities,
+but it is to be expected that if there is an incentive for higher scores,
+stakeholders will take advantage of any bias, skewness or shortcoming availble \cite{campbell}.
+
 Mitigations are discussed in the context of the roles responsible to implement them.
 
 TODO: Does the standard allow revocation of already reported metrics?
@@ -476,6 +540,8 @@ TODO: Does the standard allow revocation of already reported metrics?
 Variing interaction counting is of large impact.
 The COP standardizes the counting procedure with regard to double-clicks
 and sessions (7.2/7.3).
+This is clearly an advantage over aggregators of altmetrics (social media metrics),
+where aggregation is unspecified and reported numbers vary across aggregators \cite{sh057}.
 
 \subsection{Same Name Duplication}
 
@@ -530,6 +596,9 @@ anomaly detection (a dataset getting anormal attention).
 A standardized way to revoce already reported metrics
 would also be an effective countermeasure to decrease
 the motivation of the attackers.
+Another challenge lies in the "private" nature of usage statistics:
+while other event-based metrics allow the quantification of self-promotions (citing
+or liking own content), there is no feasible way to do that for usage statistics.
 
 \subsection{Versioning}
 This shortcoming is of medium impact.
@@ -641,6 +710,6 @@ Remember to thank:
 \end{itemize}
 
 \bibliographystyle{IEEEtran}
-\bibliography{paper}
+\bibliography{../phd/doc/phd/sh/sh.bib}
 
 \end{document}
